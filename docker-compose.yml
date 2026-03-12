@@ -12,3 +12,4 @@ services:
       - ./nginx/sites-enabled:/usr/local/openresty/nginx/sites-enabled
       - ./nginx/snippets:/usr/local/openresty/nginx/conf/snippets
       - ./nginx/errors:/usr/local/openresty/nginx/errors
+      - /etc/letsencrypt:/etc/letsencrypt:ro
