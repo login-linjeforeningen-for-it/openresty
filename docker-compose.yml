@@ -3,9 +3,7 @@ services:
     container_name: openresty
     build: .
     restart: always
-    ports:
-      - "80:80"
-      - "443:443"
+    network_mode: host
     volumes:
       - ./nginx/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
       - ./nginx/conf.d:/usr/local/openresty/nginx/conf.d
