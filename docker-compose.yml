@@ -12,7 +12,6 @@ services:
     volumes:
       - ./nginx/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
       - ./nginx/conf.d:/usr/local/openresty/nginx/conf.d
-      - ./nginx/sites-enabled:/usr/local/openresty/nginx/sites-enabled
       - ./nginx/snippets:/usr/local/openresty/nginx/conf/snippets
       - ./nginx/errors:/usr/local/openresty/nginx/errors
       - /etc/letsencrypt:/etc/letsencrypt:ro
