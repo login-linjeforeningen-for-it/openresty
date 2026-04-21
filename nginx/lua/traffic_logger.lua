@@ -25,9 +25,13 @@ if not geo.initted() then
     end
     file:close()
 
-    local ok, err = geo.init(db_path)
+    local ok, init_ok, init_err = pcall(geo.init, db_path)
     if not ok then
-        ngx.log(ngx.ERR, "Failed to initialize MaxMind DB: ", err)
+        ngx.log(ngx.ERR, "Failed to initialize MaxMind DB (thrown): ", init_ok)
+        return
+    end
+    if not init_ok then
+        ngx.log(ngx.ERR, "Failed to initialize MaxMind DB: ", init_err)
         return
     end
 end
