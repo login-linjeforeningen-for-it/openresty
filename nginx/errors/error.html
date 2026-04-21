@@ -5,163 +5,409 @@
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <meta name='x-error-code' content='<!--#echo var="arg_code" default="" -->'>
         <title>Error</title>
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
         <style>
             :root {
-                --bg-dark: #000000;
-                --glass-bg: rgba(255, 255, 255, 0.08);
-                --text-main: #f5f5f7;
+                --bg-dark: #131313;
+                --surface: #1c1b1b;
+                --surface-high: #2a2a2a;
+                --surface-highest: #353535;
+                --text-main: #e5e2e1;
+                --text-variant: #ddc1b2;
                 --accent: #fd8738;
-                --blur: 20px;
+                --accent-light: #ffb68d;
+                --error: #e96e60;
+                --error-container: #93000a;
+                --outline-variant: rgba(86, 66, 56, 0.2);
             }
 
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-            }
+            * { box-sizing: border-box; margin: 0; padding: 0; }
 
             body {
                 min-height: 100vh;
-                background: radial-gradient(circle at top, #0a0a0a, #000);
+                background-color: var(--bg-dark);
                 color: var(--text-main);
-                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+                font-family: 'Inter', sans-serif;
+                display: flex;
+                flex-direction: column;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            header {
+                background: rgba(19, 19, 19, 0.8);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                padding: 1.5rem 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid var(--outline-variant);
+                z-index: 50;
+            }
+
+            .brand {
+                font-family: 'Poppins', sans-serif;
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: #ffffff;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            main {
+                flex-grow: 1;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                padding: 2rem;
+                position: relative;
                 overflow: hidden;
-                padding: 24px;
+            }
+
+            .glow-bg {
+                position: absolute;
+                width: 60vw;
+                height: 60vw;
+                border-radius: 50%;
+                background: radial-gradient(circle, var(--error-container) 0%, transparent 60%);
+                opacity: 0.15;
+                filter: blur(100px);
+                pointer-events: none;
+                z-index: 0;
             }
 
             .container {
-                backdrop-filter: blur(var(--blur)) saturate(180%);
-                -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
-                background-color: var(--glass-bg);
-                border-radius: 20px;
-                border: 1px solid rgba(255, 255, 255, 0.15);
-                box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
-                padding: 60px 80px;
-                text-align: center;
-                width: 500px;
-                max-width: 100%;
-                animation: fadeIn 0.8s ease-out;
+                z-index: 10;
+                width: 100%;
+                max-width: 900px;
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                align-items: flex-start;
+            }
+
+            .divider {
+                display: none;
+                width: 4px;
+                background-color: var(--surface-highest);
+                border-radius: 2px;
+                opacity: 0.5;
+                align-self: stretch;
+            }
+
+            @media (min-width: 768px) {
+                .container { 
+                    flex-direction: row;
+                    align-items: center; 
+                    gap: 3rem;
+                }
+                .divider { display: block; }
+                .glow-bg { width: 40vw; height: 40vw; }
+            }
+
+            .content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 2.5rem;
+            }
+
+            .alert-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                background-color: var(--surface);
+                padding: 0.45rem 0.9rem;
+                border-radius: 9999px;
+                border: 1px solid var(--outline-variant);
+                width: fit-content;
+                margin-bottom: 1rem;
+            }
+
+            .alert-text {
+                font-size: 0.75rem;
+                letter-spacing: 0.05em;
+                color: var(--error);
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+
+            .alert-icon {
+                color: #ffffff;
+                width: 1rem;
+                height: 1rem;
+                display: inline-flex;
+            }
+
+            .alert-badge svg {
+                width: 1rem;
+                height: 1rem;
+                stroke: currentColor;
             }
 
             h1 {
-                font-size: 6rem;
-                color: var(--accent);
-                letter-spacing: -2px;
-                margin-bottom: 0.5rem;
-                text-shadow: 0 0 20px #fda062;
+                font-family: 'Manrope', sans-serif;
+                font-size: clamp(4.5rem, 10vw, 8rem);
+                font-weight: 800;
+                letter-spacing: -0.05em;
                 line-height: 1;
+                margin: 0;
+                color: var(--text-main);
+            }
+
+            .context-panel {
+                background-color: var(--surface);
+                padding: 2rem;
+                border-radius: 0.75rem;
+                border: 1px solid var(--outline-variant);
+                box-shadow: 0 24px 48px -12px rgba(0,0,0,0.5);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .accent-bar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 4px;
+                background: linear-gradient(90deg, var(--error), var(--error-container));
+                opacity: 0.8;
             }
 
             h2 {
-                font-size: 1.4rem;
-                margin-bottom: 1.5rem;
-                color: #d1d1d6;
+                font-size: 1.25rem;
+                margin-bottom: 0.75rem;
+                color: var(--text-main);
+                font-weight: 600;
             }
 
             p {
-                font-size: 1rem;
-                color: #a1a1aa;
-                margin: 0 auto 1.8rem auto;
-                max-width: 320px;
+                font-size: 1.05rem;
+                color: var(--text-variant);
+                line-height: 1.6;
+                margin-bottom: 1rem;
             }
 
-            a {
-                display: inline-block;
-                padding: 0.6rem 1.4rem;
-                font-size: 1rem;
+            .meta-data {
+                margin-top: 1.5rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid rgba(255,255,255,0.05);
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+
+            .meta-item {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .meta-label {
+                font-family: 'Inter', sans-serif;
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                color: var(--outline-variant);
+                opacity: 0.8;
+            }
+
+            .meta-value {
+                font-family: monospace;
+                font-size: 0.875rem;
                 color: var(--text-main);
-                background: var(--accent);
-                border-radius: 12px;
-                text-decoration: none;
-                transition: all 0.25s ease;
-                box-shadow: 0 2px 10px #fda062;
             }
 
-            a:hover {
-                background: #fd8738;
-                box-shadow: 0 4px 20px #f5853b;
-                transform: translateY(-2px);
+            .actions {
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.5rem 1.2rem;
+                border-radius: 0.2rem;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 500;
+                font-size: 1rem;
+                line-height: 1.5rem;
+                text-decoration: none;
+                transition: all 0.2s ease-in;
+                cursor: pointer;
+                border: none;
+            }
+
+            .btn svg {
+                width: 1.25rem;
+                height: 1.25rem;
+                margin-right: 0.5rem;
+            }
+
+            .btn-primary {
+                background-color: #d95d0a;
+                color: #ffffff;
+            }
+
+            .btn-primary:hover {
+                filter: brightness(0.95);
+            }
+
+            .btn-secondary {
+                background-color: #424242;
+                color: #ffffff;
+            }
+
+            .btn-secondary:hover {
+                filter: brightness(0.95);
             }
 
             footer {
-                position: absolute;
-                bottom: 15px;
-                width: 100%;
-                text-align: center;
-                color: #555;
-                font-size: 0.8rem;
-                letter-spacing: 0.3px;
+                background-color: var(--surface);
+                padding: 2rem 3rem;
+                font-size: 0.875rem;
+                color: #71717a;
+                border-top: 1px solid var(--outline-variant);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 1rem;
+                z-index: 40;
             }
 
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
+            .footer-links {
+                display: flex;
+                gap: 1.5rem;
+            }
+
+            .footer-links a {
+                color: #71717a;
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+            .footer-links a:hover {
+                color: var(--accent);
             }
 
             @media (max-width: 640px) {
-                .container {
-                    padding: 40px 24px;
-                }
-
-                h1 {
-                    font-size: 4.5rem;
-                }
+                .meta-data { grid-template-columns: 1fr; }
+                footer { flex-direction: column; justify-content: center; text-align: center; }
+                .footer-links { flex-wrap: wrap; justify-content: center; }
             }
         </style>
     </head>
     <body>
-        <div class='container'>
-            <h1 id='error-code'>500</h1>
-            <h2 id='error-title'>Internal Server Error</h2>
-            <p id='error-description'>The site could not be reached. Please try again.</p>
-            <a id='home-link' href='https://login.no'>Go Home</a>
-        </div>
+        <header>
+            <div class='brand'>
+                <img src='https://cdn.login.no/img/logo/logo-white-small.svg' alt='Login Logo' style='height: 3rem; width: auto;' />
+            </div>
+        </header>
 
-        <footer>Copyright <span id='year'></span> <span id='domain'></span></footer>
+        <main>
+            <div class='glow-bg'></div>
+            <div class='container'>
+                <div class='divider'></div>
+                <div class='content'>
+                    <div>
+                        <div class='alert-badge' id='badge-container'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert-icon lucide-circle-alert alert-icon">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" x2="12" y1="8" y2="12"/>
+                                <line x1="12" x2="12.01" y1="16" y2="16"/>
+                            </svg>
+                            <span class='alert-text' id='alert-type'>System Error</span>
+                        </div>
+                        <h1 id='error-code'>500</h1>
+                    </div>
+                    
+                    <div class='context-panel'>
+                        <div class='accent-bar' id='accent-bar'></div>
+                        <h2 id='error-title'>Internal Server Error</h2>
+                        <p id='error-description'>An unexpected error occurred while processing your request. The infrastructure has logged this incident for immediate review.</p>
+                        
+                        <div class='meta-data'>
+                            <div class='meta-item'>
+                                <span class='meta-label' style="color: rgba(255,255,255,0.4);">Domain</span>
+                                <span class='meta-value' id='domain'>login.no</span>
+                            </div>
+                            <div class='meta-item'>
+                                <span class='meta-label' style="color: rgba(255,255,255,0.4);">Timestamp</span>
+                                <span class='meta-value' id='timestamp'></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class='actions'>
+                        <a id='home-link' href='https://login.no' class='btn btn-primary'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house">
+                                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+                                <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            </svg>
+                            Return home
+                        </a>
+                        <button onclick="window.location.reload()" class='btn btn-secondary'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-cw-icon lucide-rotate-cw">
+                                <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                                <path d="M21 3v5h-5"/>
+                            </svg>
+                            Retry
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div>Copyright © <span id='year'></span> Login - Linjeforeningen for IT, NO 811 940 372</div>
+            <nav class='footer-links'>
+                <a href='https://status.login.no'>System Status</a>
+            </nav>
+        </footer>
 
         <script>
             const pages = {
-                '400': { title: 'Bad Request', description: 'The request included bad content. Please remove it and try again.' },
-                '401': { title: 'Unauthorized', description: 'You are not authorized to view this page.' },
-                '403': { title: 'Forbidden', description: 'You are not allowed to view this page.' },
-                '404': { title: 'Page Not Found', description: 'The page you are looking for does not exist on this domain.' },
-                '405': { title: 'Method Not Allowed', description: 'The attempted method is not allowed for this endpoint.' },
-                '406': { title: 'Not Acceptable', description: 'The request is not acceptable.' },
-                '407': { title: 'VPN Required', description: 'This content is protected by NTNU VPN. Please enable it and try again.' },
-                '408': { title: 'Request Timeout', description: 'The site could not be reached. Please try again.' },
-                '409': { title: 'Conflict', description: 'There was a conflict while handling the request.' },
-                '410': { title: 'Gone', description: 'This content has been permanently removed.' },
-                '418': { title: 'I am a teapot', description: 'I am a teapot.' },
-                '429': { title: 'Too Many Requests', description: 'Too many requests were sent. Please try again later.' },
-                '451': { title: 'Unavailable for Legal Reasons', description: 'The content is not available due to legal restrictions.' },
-                '500': { title: 'Internal Server Error', description: 'The site could not be reached. Please try again.' },
-                '501': { title: 'Not Implemented', description: 'This feature is not implemented.' },
-                '502': { title: 'Bad Gateway', description: 'The site could not be reached. Please try again.' },
-                '503': { title: 'Service Unavailable', description: 'The site could not be reached. Please try again.' },
-                '504': { title: 'Gateway Timeout', description: 'The site could not be reached. Please try again.' }
+                '400': { title: 'Bad Request', description: 'The request included bad content. Please remove it and try again.', type: 'Warning' },
+                '401': { title: 'Unauthorized', description: 'You are not authorized to view this page.', type: 'Warning' },
+                '403': { title: 'Forbidden', description: 'You are not allowed to view this page.', type: 'Warning' },
+                '404': { title: 'Page Not Found', description: 'The page you are looking for does not exist on this domain.', type: 'Warning' },
+                '405': { title: 'Method Not Allowed', description: 'The attempted method is not allowed for this endpoint.', type: 'Warning' },
+                '406': { title: 'Not Acceptable', description: 'The request is not acceptable.', type: 'Warning' },
+                '407': { title: 'VPN Required', description: 'This content is protected by NTNU VPN. Please enable it and try again.', type: 'Access Denied' },
+                '408': { title: 'Request Timeout', description: 'The site could not be reached. Please try again.', type: 'Timeout' },
+                '409': { title: 'Conflict', description: 'There was a conflict while handling the request.', type: 'Warning' },
+                '410': { title: 'Gone', description: 'This content has been permanently removed.', type: 'Warning' },
+                '418': { title: 'I am a teapot', description: 'I am a teapot.', type: 'Info' },
+                '429': { title: 'Too Many Requests', description: 'Too many requests were sent. Please try again later.', type: 'Timeout' },
+                '451': { title: 'Unavailable for Legal Reasons', description: 'The content is not available due to legal restrictions.', type: 'Blocked' },
+                '500': { title: 'Internal Server Error', description: 'An unexpected error occurred while processing your request. The infrastructure has logged this incident.', type: 'Critical Failure' },
+                '501': { title: 'Not Implemented', description: 'This feature is not implemented.', type: 'System Error' },
+                '502': { title: 'Bad Gateway', description: 'The site could not be reached. Please try again.', type: 'System Error' },
+                '503': { title: 'Service Unavailable', description: 'The site could not be reached. Please try again.', type: 'System Error' },
+                '504': { title: 'Gateway Timeout', description: 'The site could not be reached. Please try again.', type: 'Timeout' }
             };
 
             function getBaseDomain(hostname) {
                 const parts = hostname.split('.').filter(Boolean);
-                if (parts.length >= 2) {
-                    return parts.slice(-2).join('.');
-                }
-                if (parts.length === 1) {
-                    return parts[0];
-                }
+                if (parts.length >= 2) { return parts.slice(-2).join('.'); }
+                if (parts.length === 1) { return parts[0]; }
                 return 'login.no';
             }
 
             const serverCode = document.querySelector('meta[name="x-error-code"]')?.content || '';
             const rawCode = serverCode || '500';
             const code = /^\d{3}$/.test(rawCode) ? rawCode : '500';
-            const page = pages[code] || {
-                title: 'Unexpected Error',
-                description: 'An unexpected error occurred.'
-            };
+            const page = pages[code] || { title: 'Unexpected Error', description: 'An unexpected error occurred.', type: 'System Error' };
+
+            const isClientError = code.startsWith('4');
+            const colorMain = isClientError ? 'var(--accent)' : 'var(--error)';
+            const colorContainer = isClientError ? 'var(--accent-light)' : 'var(--error-container)';
+            const iconRef = isClientError ? 'warning' : 'error';
 
             const domain = getBaseDomain(window.location.hostname || 'login.no');
             const homeLink = `https://${domain}`;
@@ -170,9 +416,22 @@
             document.getElementById('error-code').textContent = code;
             document.getElementById('error-title').textContent = page.title;
             document.getElementById('error-description').textContent = page.description;
+            document.getElementById('alert-type').textContent = page.type || (isClientError ? 'Warning' : 'Critical Failure');
+            
+            const badgeIcon = document.querySelector('.alert-icon');
+            if (badgeIcon) {
+                badgeIcon.style.color = colorMain;
+            }
+            document.getElementById('alert-type').style.color = colorMain;
+            document.getElementById('accent-bar').style.background = `linear-gradient(90deg, ${colorMain}, ${colorContainer})`;
+            document.querySelector('.glow-bg').style.background = `radial-gradient(circle, ${colorContainer} 0%, transparent 60%)`;
+
             document.getElementById('home-link').href = homeLink;
             document.getElementById('domain').textContent = domain;
             document.getElementById('year').textContent = new Date().getFullYear();
+            
+            const now = new Date();
+            document.getElementById('timestamp').textContent = now.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
         </script>
     </body>
 </html>
