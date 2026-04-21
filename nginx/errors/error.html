@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <meta name='x-error-code' content='<!--#echo var="arg_code" default="" -->'>
         <title>Error</title>
         <style>
             :root {
@@ -23,7 +24,7 @@
                 min-height: 100vh;
                 background: radial-gradient(circle at top, #0a0a0a, #000);
                 color: var(--text-main);
-                font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -112,68 +113,66 @@
         </style>
     </head>
     <body>
-        <div class="container">
-            <h1 id="error-code">500</h1>
-            <h2 id="error-title">Internal Server Error</h2>
-            <p id="error-description">The site could not be reached. Please try again.</p>
-            <a id="home-link" href="https://login.no">Go Home</a>
+        <div class='container'>
+            <h1 id='error-code'>500</h1>
+            <h2 id='error-title'>Internal Server Error</h2>
+            <p id='error-description'>The site could not be reached. Please try again.</p>
+            <a id='home-link' href='https://login.no'>Go Home</a>
         </div>
 
-        <footer>Copyright <span id="year"></span> <span id="domain"></span></footer>
+        <footer>Copyright <span id='year'></span> <span id='domain'></span></footer>
 
         <script>
             const pages = {
-                "400": { title: "Bad Request", description: "The request included bad content. Please remove it and try again." },
-                "401": { title: "Unauthorized", description: "You are not authorized to view this page." },
-                "403": { title: "Forbidden", description: "You are not allowed to view this page." },
-                "404": { title: "Page Not Found", description: "The page you are looking for does not exist on this domain." },
-                "405": { title: "Method Not Allowed", description: "The attempted method is not allowed for this endpoint." },
-                "406": { title: "Not Acceptable", description: "The request is not acceptable." },
-                "407": { title: "VPN Required", description: "This content is protected by NTNU VPN. Please enable it and try again." },
-                "408": { title: "Request Timeout", description: "The site could not be reached. Please try again." },
-                "409": { title: "Conflict", description: "There was a conflict while handling the request." },
-                "410": { title: "Gone", description: "This content has been permanently removed." },
-                "418": { title: "I am a teapot", description: "I am a teapot." },
-                "429": { title: "Too Many Requests", description: "Too many requests were sent. Please try again later." },
-                "451": { title: "Unavailable for Legal Reasons", description: "The content is not available due to legal restrictions." },
-                "500": { title: "Internal Server Error", description: "The site could not be reached. Please try again." },
-                "501": { title: "Not Implemented", description: "This feature is not implemented." },
-                "502": { title: "Bad Gateway", description: "The site could not be reached. Please try again." },
-                "503": { title: "Service Unavailable", description: "The site could not be reached. Please try again." },
-                "504": { title: "Gateway Timeout", description: "The site could not be reached. Please try again." }
+                '400': { title: 'Bad Request', description: 'The request included bad content. Please remove it and try again.' },
+                '401': { title: 'Unauthorized', description: 'You are not authorized to view this page.' },
+                '403': { title: 'Forbidden', description: 'You are not allowed to view this page.' },
+                '404': { title: 'Page Not Found', description: 'The page you are looking for does not exist on this domain.' },
+                '405': { title: 'Method Not Allowed', description: 'The attempted method is not allowed for this endpoint.' },
+                '406': { title: 'Not Acceptable', description: 'The request is not acceptable.' },
+                '407': { title: 'VPN Required', description: 'This content is protected by NTNU VPN. Please enable it and try again.' },
+                '408': { title: 'Request Timeout', description: 'The site could not be reached. Please try again.' },
+                '409': { title: 'Conflict', description: 'There was a conflict while handling the request.' },
+                '410': { title: 'Gone', description: 'This content has been permanently removed.' },
+                '418': { title: 'I am a teapot', description: 'I am a teapot.' },
+                '429': { title: 'Too Many Requests', description: 'Too many requests were sent. Please try again later.' },
+                '451': { title: 'Unavailable for Legal Reasons', description: 'The content is not available due to legal restrictions.' },
+                '500': { title: 'Internal Server Error', description: 'The site could not be reached. Please try again.' },
+                '501': { title: 'Not Implemented', description: 'This feature is not implemented.' },
+                '502': { title: 'Bad Gateway', description: 'The site could not be reached. Please try again.' },
+                '503': { title: 'Service Unavailable', description: 'The site could not be reached. Please try again.' },
+                '504': { title: 'Gateway Timeout', description: 'The site could not be reached. Please try again.' }
             };
 
             function getBaseDomain(hostname) {
-                const parts = hostname.split(".").filter(Boolean);
+                const parts = hostname.split('.').filter(Boolean);
                 if (parts.length >= 2) {
-                    return parts.slice(-2).join(".");
+                    return parts.slice(-2).join('.');
                 }
                 if (parts.length === 1) {
                     return parts[0];
                 }
-                return "login.no";
+                return 'login.no';
             }
 
-            const params = new URLSearchParams(window.location.search);
-            const rawCode = params.get("code") || "500";
-            const code = /^\d{3}$/.test(rawCode) ? rawCode : "500";
+            const serverCode = document.querySelector('meta[name="x-error-code"]')?.content || '';
+            const rawCode = serverCode || '500';
+            const code = /^\d{3}$/.test(rawCode) ? rawCode : '500';
             const page = pages[code] || {
-                title: "Unexpected Error",
-                description: "An unexpected error occurred."
+                title: 'Unexpected Error',
+                description: 'An unexpected error occurred.'
             };
 
-            const domain = getBaseDomain(window.location.hostname || "login.no");
+            const domain = getBaseDomain(window.location.hostname || 'login.no');
             const homeLink = `https://${domain}`;
 
             document.title = `${code} - ${page.title}`;
-            document.getElementById("error-code").textContent = code;
-            document.getElementById("error-title").textContent = page.title;
-            document.getElementById("error-description").textContent = page.description;
-            document.getElementById("home-link").href = homeLink;
-            document.querySelectorAll("#domain").forEach((el) => {
-                el.textContent = domain;
-            });
-            document.getElementById("year").textContent = new Date().getFullYear();
+            document.getElementById('error-code').textContent = code;
+            document.getElementById('error-title').textContent = page.title;
+            document.getElementById('error-description').textContent = page.description;
+            document.getElementById('home-link').href = homeLink;
+            document.getElementById('domain').textContent = domain;
+            document.getElementById('year').textContent = new Date().getFullYear();
         </script>
     </body>
 </html>
