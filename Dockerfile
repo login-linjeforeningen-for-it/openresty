@@ -1,6 +1,6 @@
 FROM openresty/openresty:alpine
 
-RUN apk add --no-cache curl perl
+RUN apk add --no-cache curl perl libmaxminddb
 
 RUN opm get ledgetech/lua-resty-http \
 && opm get fffonion/lua-resty-openssl \
