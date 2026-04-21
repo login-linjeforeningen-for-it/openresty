@@ -4,6 +4,8 @@ services:
     build: .
     restart: always
     network_mode: host
+    env_file:
+      - .env
     logging:
       driver: json-file
       options:
@@ -14,4 +16,6 @@ services:
       - ./nginx/conf.d:/usr/local/openresty/nginx/conf.d
       - ./nginx/snippets:/usr/local/openresty/nginx/conf/snippets
       - ./nginx/errors:/usr/local/openresty/nginx/errors
+      - ./nginx/maxmind:/usr/local/openresty/nginx/maxmind
+      - ./nginx/lua:/usr/local/openresty/nginx/lua
       - /etc/letsencrypt:/etc/letsencrypt:ro
