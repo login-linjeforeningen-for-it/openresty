@@ -19,3 +19,5 @@ services:
       - ./nginx/maxmind:/usr/local/openresty/nginx/maxmind
       - ./nginx/lua:/usr/local/openresty/nginx/lua
       - /etc/letsencrypt:/etc/letsencrypt:ro
+    mem_limit: 1g
+    cpus: "2.0"
