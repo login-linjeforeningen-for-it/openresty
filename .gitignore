@@ -2,6 +2,7 @@
 
 nginx/conf.d/*
 !nginx/conf.d/.gitkeep
+!nginx/conf.d/default.conf
 
 nginx/maxmind/*
 !nginx/maxmind/.gitkeep
