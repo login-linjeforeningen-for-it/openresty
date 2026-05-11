@@ -13,8 +13,8 @@ services:
         max-file: "3"
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./nginx/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
-      - ./nginx/conf.d:/usr/local/openresty/nginx/conf.d
+      - ./${NGINX_MAIN_CONF:-nginx/conf/nginx.conf}:/usr/local/openresty/nginx/conf/nginx.conf:ro
+      - ./${NGINX_CONF_FILE:-nginx/conf.d/default.conf}:/usr/local/openresty/nginx/conf.d/default.conf:ro
       - ./nginx/snippets:/usr/local/openresty/nginx/conf/snippets
       - ./nginx/errors:/usr/local/openresty/nginx/errors
       - ./nginx/maxmind:/usr/local/openresty/nginx/maxmind
