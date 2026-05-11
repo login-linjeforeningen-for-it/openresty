@@ -12,12 +12,6 @@ services:
         max-size: "10m"
         max-file: "3"
     volumes:
-      - ./nginx/conf/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf:ro
-      - ./nginx/conf.d:/usr/local/openresty/nginx/conf.d
-      - ./nginx/snippets:/usr/local/openresty/nginx/conf/snippets
-      - ./nginx/errors:/usr/local/openresty/nginx/errors
-      - ./nginx/maxmind:/usr/local/openresty/nginx/maxmind
-      - ./nginx/lua:/usr/local/openresty/nginx/lua
       - /etc/letsencrypt:/etc/letsencrypt:ro
     mem_limit: 1g
     cpus: "2.0"
