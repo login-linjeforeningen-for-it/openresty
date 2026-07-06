@@ -21,7 +21,45 @@ Reverse proxy for Login. OpenResty (nginx + LuaJIT) with MaxMind GeoIP, Let's En
 docker compose up -d
 ```
 
-TLS certificates are read from `/etc/letsencrypt` on the host (mounted read-only).
+## TLS certificates
+
+Certificates are issued and renewed automatically **on demand** by OpenResty
+itself using [`lua-resty-acme`](https://github.com/fffonion/lua-resty-acme) and
+the Let's Encrypt HTTP-01 challenge — there is no certbot and no per-domain
+setup:
+
+- On the first HTTPS request to a hostname, OpenResty obtains a certificate and
+  caches it. Renewal happens in the background; no reload or restart is needed.
+- Only `login.no` and `*.login.no` are eligible (whitelist in
+  `nginx/conf/nginx.conf`), to stay within rate limits and ignore stray SNI.
+- Issued certs and the ACME account are stored in the `acme` Docker volume
+  (`/etc/resty-acme`), so restarts don't trigger re-issuance.
+
+### Adding a new subdomain
+
+Just add its `server {}` block and include the two ACME snippets — no
+certificate step:
+
+```nginx
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+
+    server_name newsub.login.no;
+
+    include snippets/acme-ssl.conf;
+
+    location / {
+        proxy_pass http://127.0.0.1:PORT;
+        include snippets/proxy-headers.conf;
+    }
+}
+```
+
+Point DNS at the host and reload. The port-80 redirect servers already include
+`snippets/acme-challenge.conf`, which serves the HTTP-01 challenge for every
+hostname.
 
 ## Configuration
 
