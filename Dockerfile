@@ -15,3 +15,9 @@ RUN openssl req -x509 -newkey rsa:2048 -nodes -days 3650 \
     -keyout /etc/ssl/acme-fallback.key \
     -out /etc/ssl/acme-fallback.crt \
     -subj "/CN=acme-fallback"
+
+RUN echo "resolver 1.1.1.1 8.8.8.8 ipv6=off;" > /usr/local/openresty/nginx/conf/resolver.conf
+
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
