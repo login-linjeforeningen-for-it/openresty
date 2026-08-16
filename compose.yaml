@@ -18,6 +18,7 @@ services:
       - ./nginx/errors:/usr/local/openresty/nginx/errors
       - ./nginx/maxmind:/usr/local/openresty/nginx/maxmind
       - ./nginx/lua:/usr/local/openresty/nginx/lua
+      - ./nginx/www:/usr/local/openresty/nginx/www:ro
       - acme:/etc/resty-acme
 
     mem_limit: 1g

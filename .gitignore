@@ -2,3 +2,6 @@
 
 nginx/maxmind/*
 !nginx/maxmind/.gitkeep
+
+nginx/www/*
+!nginx/www/.gitkeep
