@@ -19,6 +19,7 @@ services:
       - ./nginx/maxmind:/usr/local/openresty/nginx/maxmind
       - ./nginx/lua:/usr/local/openresty/nginx/lua
       - ./nginx/www:/usr/local/openresty/nginx/www:ro
+      - ./nginx/certs:/etc/ssl/wildcard:ro
       - acme:/etc/resty-acme
 
     mem_limit: 1g

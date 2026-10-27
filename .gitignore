@@ -5,3 +5,6 @@ nginx/maxmind/*
 
 nginx/www/*
 !nginx/www/.gitkeep
+
+nginx/certs/*
+!nginx/certs/.gitkeep
